@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toko Taylor Swift</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</head>
+<body>
+    <div id="app" class="container">
+        <header>
+            <div class="header-left">
+                <h2>Toko <br>Berkah Jaya</h1>
+            </div>
+            <div class="header-right">
+                <img src="image/berkahjayaNoBG.png" alt="Logo" class="logo">
+            </div>
+        </header>
+        <div class="invoice-info">
+            <div class="info-left">
+                <div class="info-item">
+                    <label for="no-nota">No. Nota   :</label>
+                    <input type="text" id="no-nota" v-model="invoice.noNota">
+                </div>
+                <div class="info-item">
+                    <label for="pelanggan">Pelanggan    :</label>
+                    <input type="text" id="pelanggan" v-model="invoice.pelanggan">
+                </div>
+                <div class="info-item">
+                    <label for="tanggal">Tanggal    :</label>
+                    <input type="text" id="tanggal" v-model="invoice.tanggal" ref="tanggal">
+                    <span class="calendar-icon" @click="openCalendar">📅</span>
+                </div>
+            </div>
+            <div class="info-right">
+                <div class="total-payment">
+                    <p>Total Pembayaran:</p>
+                    <p class="amount">Rp. {{ totalPayment }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="product-info">
+            <div class="product-item">
+                <label for="kode-barang">Kode Barang :</label>
+                <select id="kode-barang" v-model="newProduct.kodeBarang" @change="updateProductDetails">
+                    <option v-for="item in items" :value="item.id">{{ item.id }}</option>
+                </select>
+                <label for="nama-barang">Nama Barang :</label>
+                <input type="text" id="nama-barang" v-model="newProduct.namaBarang" readonly>
+                <label for="quantity">Quantity :</label>
+                <input type="number" id="quantity" v-model="newProduct.quantity" min="1">
+                <button @click="addProduct">Tambah</button>
+            </div>
+        </div>
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>ID Barang</th>
+                    <th>Nama Barang</th>
+                    <th>Harga Satuan</th>
+                    <th>Qty</th>
+                    <th>Jumlah</th>
+                    <th>Opsi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(product, index) in products" :key="index">
+                    <td>{{ product.kodeBarang }}</td>
+                    <td>{{ product.namaBarang }}</td>
+                    <td>{{ product.hargaSatuan }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>{{ product.jumlah }}</td>
+                    <td class="delete" @click="removeProduct(index)">Hapus</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="summary">
+            <div class="summary-left">
+                <div class="summary-item">
+                    <label for="sub-total">Sub Total:</label>
+                    <input type="text" id="sub-total" :value="'Rp. ' + subTotal" readonly>
+                </div>
+<div class="summary-item">
+    <label for="diskon">Diskon (%):</label>
+    <input type="number" id="diskon" v-model="discountPercent">
+</div>
+<div class="summary-item">
+    <label for="diskon-rp">Diskon (Rp):</label>
+    <input type="text" id="diskon-rp" :value="'Rp. ' + discountAmount" readonly>
+</div>
+                <div class="summary-item">
+                    <label for="total-harga">Total Harga:</label>
+                    <input type="text" id="total-harga" :value="'Rp. ' + totalHarga" readonly>
+                </div>
+            </div>
+            <div class="summary-right">
+                <div class="summary-item">
+                    <label for="bayar">Bayar:</label>
+                    <input type="text" id="bayar" v-model="bayar">
+                </div>
+                <div class="summary-item">
+                    <label for="kembalian">Kembalian:</label>
+                    <input type="text" id="kembalian" :value="'Rp. ' + kembalian" readonly>
+                </div>
+            </div>
+        </div>
+        <div class="button-container">
+            <button class="complete-button" @click="completeTransaction">Selesai</button>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
